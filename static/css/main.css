@@ -547,6 +547,64 @@ td {
     width: 60px;
 }
 
+/* yuimawasu floating button */
+.fab-yuimawasu {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1100;
+    font-family: 'Yomogi', sans-serif;
+    font-size: 1.1rem;
+    color: #fff;
+    background-color: rgba(239, 119, 71, 1);
+    border-radius: 50px;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(239, 119, 71, 0.5);
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+.fab-yuimawasu:hover {
+    background-color: rgba(210, 90, 45, 1);
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(239, 119, 71, 0.6);
+}
+
+/* yuimawasu CTA */
+.yuimawasu-cta {
+    margin: 3rem auto 1rem;
+    text-align: center;
+}
+
+.yuimawasu-cta p {
+    font-family: 'Yomogi', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+    text-align: center;
+}
+
+.yuimawasu-btn {
+    display: inline-block;
+    font-family: 'Yomogi', sans-serif;
+    font-size: 1.4rem;
+    color: #fff;
+    background-color: rgba(239, 119, 71, 1);
+    border-radius: 50px;
+    padding: 0.8rem 2.5rem;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 8px rgba(239, 119, 71, 0.4);
+}
+
+.yuimawasu-btn:hover {
+    background-color: rgba(210, 90, 45, 1);
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
 /* MOBILE SIZE */
 
 @media (max-width: 700px) {
