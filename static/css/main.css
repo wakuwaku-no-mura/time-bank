@@ -509,42 +509,66 @@ td {
 
 /* footer */
 .footer {
-    padding-top: 20px;
-    margin-bottom: 20px;
-}
-
-.footer p {
-    padding: 2rem 0;
-    text-align: center;
-    font-size: .875rem;
+    margin: 2rem 2rem 20px;
+    padding: 1.75rem 1.5rem 1rem;
+    background-color: #ffffff91;
+    border-radius: 30px;
 }
 
 .footer a {
     text-decoration: none;
 }
 
-.footer .menu {
-    margin: 0;
-    padding: 0;
-    list-style: none;
+.footer-social {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    gap: 1rem 2.5rem;
+    align-items: center;
 }
 
-.footer .menu li {
-    margin-left: 40px;
-    padding: 0 20px;
-    align-self: center;
+.footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 999px;
+    color: #162A41;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.footer .menu p {
-    align-self: center;
+.footer-social-link:hover {
+    background-color: rgba(173, 209, 239, 0.2);
+    transform: translateY(-2px);
+}
+
+.footer-social-label {
     font-family: 'Yomogi', sans-serif;
+    font-size: 1.5rem;
+    line-height: 1.4;
 }
 
-.link {
+.footer-social-icon {
     width: 60px;
+    height: 60px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+.footer-social-line-image {
+    display: block;
+    height: 36px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.footer-copy {
+    margin: 1rem 0 0;
+    padding-top: 0.75rem;
+    text-align: center;
+    font-size: .875rem;
+    border-top: 1px solid rgba(22, 42, 65, 0.12);
 }
 
 /* yuimawasu floating button */
@@ -603,6 +627,27 @@ td {
     color: #fff;
     text-decoration: none;
     transform: translateY(-2px);
+}
+
+.yuimawasu-banner-link {
+    display: block;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(239, 119, 71, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.yuimawasu-banner-link:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(239, 119, 71, 0.4);
+}
+
+.yuimawasu-banner-link img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 /* partner links section */
@@ -773,15 +818,32 @@ td {
     }
 
     /* footer */
-    .footer .menu li {
-        padding: 6rem 0;
-        align-self: left;
-        margin-left: 0;
+    .footer {
+        margin: 2rem 1rem 1rem;
+        padding: 1.25rem 1rem 0.875rem;
     }
 
-    .line {
-        margin-top: 40px;
+    .footer-social {
+        flex-direction: column;
+        gap: 1rem;
     }
 
+    .footer-social-link {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .footer-social-label {
+        font-size: 1.2rem;
+    }
+
+    .footer-social-link-line .footer-social-label {
+        display: none;
+    }
+
+    .footer-copy {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+    }
 
 }
