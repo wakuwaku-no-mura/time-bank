@@ -43,13 +43,13 @@
 
 ---
 
-## 2026-04-24 — ゆいまわすへのリンク追加
+## 2026-04-24 — ゆいまゎすへのリンク追加
 
 ### 概要
 
-トップページ（`index.html`）に、時間銀行の活動管理アプリ「ゆいまわす」へのリンクを2か所追加した。
+トップページ（`index.html`）に、時間銀行の活動管理アプリ「ゆいまゎす」へのリンクを2か所追加した。
 
-- **権利関係の方針**: ゆいまわすは永和システムマネジメント社が開発。画像・スクリーンショットの利用許諾が未確定のため、ボタンのみの実装とした。
+- **権利関係の方針**: ゆいまゎすは永和システムマネジメント社が開発。画像・スクリーンショットの利用許諾が未確定のため、ボタンのみの実装とした。
 - **動線の優先順位**: 既存メンバーの使いやすさを重視。
 
 ### 変更内容
@@ -63,7 +63,7 @@
 <div class="yuimawasu-cta scroll_right">
     <p>困り事の相談や参加の呼びかけはこちらから</p>
     <a class="yuimawasu-btn" href="https://yuimalwasu--yuimalwasu.asia-east1.hosted.app/home"
-       target="_blank" rel="noopener noreferrer">ゆいまわすを開く →</a>
+       target="_blank" rel="noopener noreferrer">ゆいまゎすを開く →</a>
 </div>
 ```
 
@@ -76,7 +76,7 @@
 **`index.html`**（`<footer>` 直前）
 ```html
 <a class="fab-yuimawasu" href="https://yuimalwasu--yuimalwasu.asia-east1.hosted.app/home"
-   target="_blank" rel="noopener noreferrer">ゆいまわす</a>
+   target="_blank" rel="noopener noreferrer">ゆいまゎす</a>
 ```
 
 **`static/css/main.css`** — `.fab-yuimawasu` スタイル追加（`position: fixed; bottom: 2rem; right: 2rem; z-index: 1100`）
