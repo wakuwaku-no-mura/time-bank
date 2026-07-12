@@ -1,5 +1,45 @@
 # 変更ログ
 
+## 2026-07-12 — 活動実績ページの追加
+
+### 概要
+
+活動実績を蓄積・公開するための専用ページ（一覧ページ＋個別記事ページ）を新設。
+トップページには「活動実績」セクションを新設し、一覧ページへのバナーリンクを設置した。
+
+### 変更内容
+
+#### 1. 画像ファイルの整理
+
+- `static/images/schongarten_20260510_1.JPG`〜`_3.JPG`（圧縮済み）を `static/images/activities/2026-05-10-schongarten-cleanup/` に移動。
+
+#### 2. トップページへのバナーセクション追加
+
+**`index.html`** — `Member` セクションの後に `活動実績` セクションを新設。
+
+```html
+<section class="partner-links scroll_up">
+    <h2>活動実績</h2>
+    <div class="partner-links-grid">
+        <a class="partner-link-item" href="activities/">
+            <img src="static/images/activities/2026-05-10-schongarten-cleanup/schongarten_20260510_1.JPG" alt="2026.05.10 シェーンガルテン周辺のゴミ拾い">
+        </a>
+    </div>
+</section>
+```
+
+#### 3. 新規ページの作成
+
+- **`activities/index.html`** — 活動実績一覧ページ。カード形式で各活動実績を新しい順に一覧表示。
+- **`activities/2026-05-10-schongarten-cleanup/index.html`** — 「シェーンガルテン周辺のゴミ拾い」個別記事ページ。パンくず、説明文、写真ギャラリーを実装。
+- 各ページのヘッダー・フッターのリンク先をトップページへの相対パス（`../index.html` や `../../index.html`）に調整。
+
+#### 4. CSSの追加
+
+**`static/css/main.css`** — `.activities-main`, `.activity-grid`, `.activity-card`, `.activity-article`, `.activity-photos-grid` 等のスタイルを追加。幅700px以下でのレスポンシブ表示（縦積みレイアウト）にも対応。
+
+---
+
 ## 2026-04-24 — 協力サイトバナーセクションの追加
 
 ### 概要

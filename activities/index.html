@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>活動実績 | 時間銀行</title>
+    <meta name="description"
+        content="じかんぎんこう-わくわくの村-の活動実績一覧ページです。これまでの活動記録を掲載しています。">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="image/svg+xml" href="../static/images/favicon2.svg">
+
+    <link rel="stylesheet" href="https://unpkg.com/destyle.css@1.0.5/destyle.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Yomogi&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../static/css/main.css">
+</head>
+
+<body>
+    <header id="site-header">
+        <div class="wrapper">
+            <div class="title">
+                <a class="logo" href="../index.html#nature">じかんぎんこう</a>
+            </div>
+            <nav class="nav">
+                <ul class="main-nav">
+                    <li class="item"><a href="../index.html#nature">Home</a></li>
+                    <li class="item"><a href="../index.html#about">About</a></li>
+                    <li class="item"><a href="../index.html#member">Member</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="activities-main">
+        <section class="activities-header">
+            <h2>活動実績</h2>
+            <p class="subtitle">これまでの活動の記録です。</p>
+        </section>
+
+        <section class="activity-list">
+            <div class="activity-grid">
+                <a class="activity-card" href="2026-05-10-schongarten-cleanup/index.html">
+                    <div class="activity-card-image">
+                        <img src="../static/images/activities/2026-05-10-schongarten-cleanup/schongarten_20260510_1.JPG" alt="シェーンガルテン周辺のゴミ拾い">
+                    </div>
+                    <div class="activity-card-content">
+                        <span class="activity-date">2026.05.10</span>
+                        <h3 class="activity-title">シェーンガルテン周辺のゴミ拾い</h3>
+                        <p class="activity-excerpt">地域の子どもたちと一緒に、シェーンガルテン周辺の清掃活動を行いました。</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <a class="fab-yuimawasu" href="https://yuimalwasu--yuimalwasu.asia-east1.hosted.app/home" target="_blank"
+        rel="noopener noreferrer">ゆいまゎす</a>
+
+    <footer class="footer">
+        <div class="footer-social">
+            <a class="footer-social-link" href="https://www.instagram.com/wakuwaku.omi/">
+                <img class="footer-social-icon" src="../static/images/Instagram_Glyph_Gradient.png" alt="Instagram">
+                <span class="footer-social-label">わくわくの村 Instagram</span>
+            </a>
+            <a class="footer-social-link footer-social-link-line" href="https://lin.ee/iN7rADz">
+                <img class="footer-social-line-image" src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
+                    alt="LINE 友だち追加">
+                <span class="footer-social-label">わくわくの村 LINE</span>
+            </a>
+        </div>
+        <p class="footer-copy">
+            <small>&copy; 2023 じかんぎんこう</small>
+        </p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+    <script>
+        $(window).scroll(function () {
+            var scrollAnimationElm = document.querySelectorAll('.scroll_up , .scroll_left , .scroll_right');
+            var scrollAnimationFunc = function () {
+                var triggerMargin = 150;
+                for (var i = 0; i < scrollAnimationElm.length; i++) {
+                    if (window.innerHeight > scrollAnimationElm[i].getBoundingClientRect().top + triggerMargin) {
+                        scrollAnimationElm[i].classList.add('on');
+                    }
+                }
+            }
+            window.addEventListener('load', scrollAnimationFunc);
+            window.addEventListener('scroll', scrollAnimationFunc);
+        });
+    </script>
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "e303238e5b1848c8a27e7caa1c32c8c6"}'>
+
+        </script>
+    <!-- End Cloudflare Web Analytics -->
+</body>
+
+</html>

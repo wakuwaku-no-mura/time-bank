@@ -694,6 +694,191 @@ td {
     display: block;
 }
 
+.partner-link-text {
+    display: block;
+    padding: 0.8rem;
+    background-color: #fff;
+    font-family: 'Yomogi', sans-serif;
+    font-size: 1.1rem;
+    color: #162A41;
+    text-align: center;
+    border-top: 1px dashed #add1ef;
+}
+
+/* Activities List & Detail Pages */
+.activities-main, .activity-detail-main {
+    padding-top: 6.5rem;
+    margin: 0 2rem;
+}
+
+.activities-header {
+    margin: 2rem auto;
+    text-align: center;
+}
+
+.activities-header h2 {
+    font-family: 'Yomogi', sans-serif;
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+}
+
+.activities-header .subtitle {
+    font-family: 'Yomogi', sans-serif;
+    font-size: 1.2rem;
+    color: #555;
+}
+
+/* Card List */
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.activity-card {
+    display: block;
+    background-color: #ffffff91;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    text-decoration: none;
+    color: #162A41;
+}
+
+.activity-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0.95;
+    text-decoration: none;
+    color: #162A41;
+}
+
+.activity-card-image {
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+}
+
+.activity-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.activity-card-content {
+    padding: 1.5rem;
+    text-align: left;
+}
+
+.activity-date {
+    font-size: 0.9rem;
+    color: #666;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.activity-title {
+    font-family: 'Yomogi', sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+}
+
+.activity-excerpt {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Breadcrumb & Detail Page */
+.breadcrumb-container {
+    margin: 2rem 0 1rem;
+    text-align: left;
+}
+
+.back-link {
+    font-family: 'Yomogi', sans-serif;
+    font-size: 1.1rem;
+    color: #ef7747;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: #d25a2d;
+    text-decoration: none;
+}
+
+.activity-article {
+    background-color: #ffffff91;
+    border-radius: 30px;
+    padding: 3rem 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 4rem;
+    text-align: left;
+}
+
+.article-header {
+    border-bottom: 2px dashed #add1ef;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.article-date {
+    font-size: 1rem;
+    color: #666;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.article-title {
+    font-family: 'Yomogi', sans-serif;
+    font-size: 2.5rem;
+    color: #162A41;
+    margin-bottom: 0;
+}
+
+.article-body {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    color: #162A41;
+}
+
+.activity-photos-section {
+    margin-top: 3rem;
+}
+
+.activity-photos-section h3 {
+    font-family: 'Yomogi', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    border-left: 5px solid #ff8095;
+    padding-left: 10px;
+}
+
+.activity-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.activity-photo-item {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.activity-photo-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 /* MOBILE SIZE */
 
 @media (max-width: 700px) {
@@ -842,4 +1027,32 @@ td {
         padding-top: 0.75rem;
     }
 
+    /* activities mobile */
+    .activities-main, .activity-detail-main {
+        padding-top: 5rem;
+        margin: 0 1rem;
+    }
+    
+    .activities-header h2 {
+        font-size: 2.2rem;
+    }
+    
+    .activity-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .activity-article {
+        padding: 1.5rem 1rem;
+        border-radius: 20px;
+    }
+    
+    .article-title {
+        font-size: 1.8rem;
+    }
+
+    .activity-photos-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
 }

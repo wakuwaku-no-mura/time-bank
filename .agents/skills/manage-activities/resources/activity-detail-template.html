@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>{title} | 活動実績 | 時間銀行</title>
+    <meta name="description"
+        content="じかんぎんこう-わくわくの村-の活動実績詳細ページ。{date}に行われた{title}について掲載しています。">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="image/svg+xml" href="../../static/images/favicon2.svg">
+
+    <link rel="stylesheet" href="https://unpkg.com/destyle.css@1.0.5/destyle.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Yomogi&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../static/css/main.css">
+</head>
+
+<body>
+    <header id="site-header">
+        <div class="wrapper">
+            <div class="title">
+                <a class="logo" href="../../index.html#nature">じかんぎんこう</a>
+            </div>
+            <nav class="nav">
+                <ul class="main-nav">
+                    <li class="item"><a href="../../index.html#nature">Home</a></li>
+                    <li class="item"><a href="../../index.html#about">About</a></li>
+                    <li class="item"><a href="../../index.html#member">Member</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="activity-detail-main">
+        <div class="breadcrumb-container">
+            <a class="back-link" href="../index.html">&larr; 活動実績一覧へ戻る</a>
+        </div>
+
+        <article class="activity-article">
+            <header class="article-header">
+                <span class="article-date">{formatted_date}</span>
+                <h1 class="article-title">{title}</h1>
+            </header>
+            <div class="article-body">
+                <p>{description}</p>
+            </div>
+            <div class="activity-photos-section">
+                <h3>活動の様子</h3>
+                <div class="activity-photos-grid">
+{photo_items}
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <a class="fab-yuimawasu" href="https://yuimalwasu--yuimalwasu.asia-east1.hosted.app/home" target="_blank"
+        rel="noopener noreferrer">ゆいまゎす</a>
+
+    <footer class="footer">
+        <div class="footer-social">
+            <a class="footer-social-link" href="https://www.instagram.com/wakuwaku.omi/">
+                <img class="footer-social-icon" src="../../static/images/Instagram_Glyph_Gradient.png" alt="Instagram">
+                <span class="footer-social-label">わくわくの村 Instagram</span>
+            </a>
+            <a class="footer-social-link footer-social-link-line" href="https://lin.ee/iN7rADz">
+                <img class="footer-social-line-image" src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"
+                    alt="LINE 友だち追加">
+                <span class="footer-social-label">わくわくの村 LINE</span>
+            </a>
+        </div>
+        <p class="footer-copy">
+            <small>&copy; 2023 じかんぎんこう</small>
+        </p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+    <script>
+        $(window).scroll(function () {
+            var scrollAnimationElm = document.querySelectorAll('.scroll_up , .scroll_left , .scroll_right');
+            var scrollAnimationFunc = function () {
+                var triggerMargin = 150;
+                for (var i = 0; i < scrollAnimationElm.length; i++) {
+                    if (window.innerHeight > scrollAnimationElm[i].getBoundingClientRect().top + triggerMargin) {
+                        scrollAnimationElm[i].classList.add('on');
+                    }
+                }
+            }
+            window.addEventListener('load', scrollAnimationFunc);
+            window.addEventListener('scroll', scrollAnimationFunc);
+        });
+    </script>
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "e303238e5b1848c8a27e7caa1c32c8c6"}'>
+
+        </script>
+    <!-- End Cloudflare Web Analytics -->
+</body>
+
+</html>
