@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>時間銀行 活動実績ダッシュボード</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page:           #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --grid:           #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-1: #2a78d6; /* blue */
+    --series-2: #eb6834; /* orange */
+    --series-3: #1baf7a; /* aqua */
+    --series-4: #eda100; /* yellow */
+    --series-5: #e87ba4; /* magenta */
+    --series-6: #008300; /* green */
+    --series-7: #6250d6; /* violet */
+    --series-8: #e34948; /* red */
+    --seq-100: #cde2fb; --seq-250: #86b6ef; --seq-400: #3987e5; --seq-550: #1c5cab;
+  }
+  @media (prefers-color-scheme: dark) {
+    .viz-root {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --page:           #0d0d0d;
+      --text-primary:   #f0efec;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --grid:           #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --series-4: #c98500;
+      --series-5: #d55181;
+      --series-6: #008300;
+      --series-7: #9085e9;
+      --series-8: #e66767;
+      --seq-100: #184f95; --seq-250: #1c5cab; --seq-400: #3987e5; --seq-550: #86b6ef;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+  }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 32px 16px 64px; }
+  header { margin-bottom: 28px; }
+  header h1 { font-size: 1.6rem; margin: 0 0 6px; }
+  header p { color: var(--text-secondary); margin: 0; font-size: 0.92rem; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .stat-tile {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .stat-tile .label { font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 6px; }
+  .stat-tile .value { font-size: 1.6rem; font-weight: 700; }
+  .stat-tile .sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+  section.panel {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 20px 8px;
+    margin-bottom: 24px;
+  }
+  section.panel h2 { font-size: 1.05rem; margin: 0 0 2px; }
+  section.panel .desc { font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 14px; }
+  .chart-box { position: relative; height: 300px; }
+  .chart-box.tall { height: 360px; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) {
+    .row-2 { grid-template-columns: 1fr; }
+    .stat-tile .value { font-size: 1.3rem; }
+  }
+
+  .insights ul { margin: 0; padding-left: 1.3em; }
+  .insights li { margin-bottom: 10px; line-height: 1.55; font-size: 0.92rem; }
+  .insights li b { color: var(--text-primary); }
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 999px;
+    margin-right: 6px;
+    background: var(--border);
+    color: var(--text-secondary);
+    vertical-align: 1px;
+  }
+
+  table.data-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 4px; }
+  table.data-table th, table.data-table td {
+    text-align: right;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--grid);
+    font-variant-numeric: tabular-nums;
+  }
+  table.data-table th:first-child, table.data-table td:first-child { text-align: left; }
+  table.data-table th { color: var(--text-secondary); font-weight: 600; }
+
+  footer { color: var(--text-muted); font-size: 0.78rem; text-align: center; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+<div class="wrap">
+
+  <header>
+    <h1>時間銀行 活動実績ダッシュボード</h1>
+    <p>対象データ: data/ 配下のCSV(投稿ごと 99件 / 人ごと 166件) ・ 生成日 2026年11月06日</p>
+  </header>
+
+  <div class="stat-grid" id="statGrid"></div>
+
+  <section class="panel">
+    <h2>月別 投稿件数と状況</h2>
+    <p class="desc">「投稿日」基準。終了・取り下げ・活動中・募集中の積み上げ。</p>
+    <div class="chart-box"><canvas id="chartStatus"></canvas></div>
+  </section>
+
+  <section class="panel">
+    <h2>月別 活動時間（終了分のみ・延べ時間）</h2>
+    <p class="desc">所要時間(分) × 参加人数 を集計し時間換算。活動の総量感を表す。</p>
+    <div class="chart-box"><canvas id="chartMinutes"></canvas></div>
+  </section>
+
+  <section class="panel">
+    <h2>月別 参加者の広がり</h2>
+    <p class="desc">その月に活動に関わった延べ人数（投稿者+参加者, 重複除く）と、初めて登場した新規人数。</p>
+    <div class="chart-box"><canvas id="chartPeople"></canvas></div>
+  </section>
+
+  <div class="row-2">
+    <section class="panel">
+      <h2>カテゴリ別件数</h2>
+      <p class="desc">全99件の内訳。</p>
+      <div class="chart-box tall"><canvas id="chartCategory"></canvas></div>
+    </section>
+    <section class="panel">
+      <h2>エリア別 / 投稿種別</h2>
+      <p class="desc">上: エリア別件数。下: お願い(依頼)とお手伝い(提供)の比率。</p>
+      <div class="chart-box" style="height:150px"><canvas id="chartArea"></canvas></div>
+      <div class="chart-box" style="height:150px"><canvas id="chartType"></canvas></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>活動時間トップ10メンバー</h2>
+    <p class="desc">投稿者・参加者としての合計所要時間（分）の上位10名。</p>
+    <div class="chart-box tall"><canvas id="chartPeopleTop"></canvas></div>
+  </section>
+
+  <section class="panel insights">
+    <h2>気づき</h2>
+    <ul id="insightsList"></ul>
+  </section>
+
+  <section class="panel">
+    <h2>月次サマリー表</h2>
+    <div style="overflow-x:auto">
+      <table class="data-table" id="summaryTable"></table>
+    </div>
+  </section>
+
+  <footer>個人名を含むため、このダッシュボードはリポジトリ内のローカル確認用です。公開サイト(GitHub Pages)には含めないでください。</footer>
+
+</div>
+</div>
+
+<script>
+const DATA = {"months": ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10", "2026-11"], "monthly_posted": [9, 3, 12, 5, 20, 17, 9, 7, 8, 7, 2], "monthly_status": {"2026-01": {"終了": 8, "取り下げ": 1}, "2026-02": {"終了": 3}, "2026-03": {"終了": 10, "取り下げ": 2}, "2026-04": {"終了": 4, "取り下げ": 1}, "2026-05": {"取り下げ": 10, "終了": 10}, "2026-06": {"終了": 12, "取り下げ": 4, "活動中": 1}, "2026-07": {"終了": 8, "取り下げ": 1}, "2026-08": {"終了": 6, "取り下げ": 1}, "2026-09": {"取り下げ": 1, "終了": 7}, "2026-10": {"取り下げ": 1, "終了": 3, "募集中": 1, "活動中": 2}, "2026-11": {"募集中": 1, "活動中": 1}}, "monthly_minutes_by_post": [413, 776, 1691, 1140, 2730, 2666, 1868, 1830, 3541, 900, 0], "monthly_new_people": [10, 4, 5, 3, 5, 11, 5, 0, 2, 0, 0], "monthly_active_unique": [10, 8, 14, 12, 15, 28, 16, 12, 19, 10, 3], "monthly_cancel_rate": [11.1, 0.0, 16.7, 20.0, 50.0, 23.5, 11.1, 14.3, 12.5, 14.3, 0.0], "cat_counts": [["その他", 36], ["子守り", 18], ["庭仕事", 10], ["農作業", 10], ["〇〇を教えるシリーズ（楽器など）", 6], ["学習サポート", 5], ["手芸・裁縫", 4], ["パソコンのサポート", 3], ["力作業", 2], ["料理", 2], ["ゴミ出し", 1], ["スマホのサポート", 1], ["ペットの世話", 1]], "area_counts": [["すべて", 52], ["麻績村", 44], ["筑北村", 3]], "type_counts": [["お願い", 79], ["お手伝い", 20]], "status_counts": [["終了", 71], ["取り下げ", 22], ["活動中", 4], ["募集中", 2]], "top_people_minutes": [["和栗　由利子", 2863], ["わくわくの村", 2803], ["小林　枝保里", 2714], ["坂野かほり", 1638], ["新海知子", 1617], ["野崎花菜", 977], ["田原尚子", 852], ["新海秀幸", 840], ["宮川和司", 811], ["髙野栄子", 690]], "top_people_activity": [["和栗　由利子", 34], ["小林　枝保里", 29], ["わくわくの村", 27], ["新海知子", 15], ["宮川和司", 15], ["坂野かほり", 14], ["田原尚子", 12], ["野崎花菜", 10], ["関根由真", 9], ["山本航大", 8]], "total_posts": 99, "total_people": 45, "total_minutes": 23247, "num_done": 71, "num_done_with_date": 20, "num_cancelled": 22};
+
+const cs = getComputedStyle(document.querySelector('.viz-root'));
+const v = (name) => cs.getPropertyValue(name).trim();
+const COLORS = {
+  s1: v('--series-1'), s2: v('--series-2'), s3: v('--series-3'), s4: v('--series-4'),
+  s5: v('--series-5'), s6: v('--series-6'), s7: v('--series-7'), s8: v('--series-8'),
+  seq100: v('--seq-100'), seq250: v('--seq-250'), seq400: v('--seq-400'), seq550: v('--seq-550'),
+  grid: v('--grid'), baseline: v('--baseline'), textSecondary: v('--text-secondary'), textMuted: v('--text-muted')
+};
+
+Chart.defaults.font.family = "system-ui, -apple-system, 'Segoe UI', 'Hiragino Sans', sans-serif";
+Chart.defaults.color = COLORS.textSecondary;
+Chart.defaults.borderColor = COLORS.grid;
+
+const commonScaleGrid = { color: COLORS.grid, drawTicks: false };
+const commonAxisTicks = { color: COLORS.textMuted };
+
+function monthLabel(ym) {
+  const [y, m] = ym.split('-');
+  return `${y.slice(2)}/${m}`;
+}
+const monthLabels = DATA.months.map(monthLabel);
+
+// ---- Stat tiles ----
+const totalHours = Math.round(DATA.total_minutes / 60);
+const completionRate = ((DATA.num_done / DATA.total_posts) * 100).toFixed(1);
+const cancelRate = ((DATA.num_cancelled / DATA.total_posts) * 100).toFixed(1);
+const stats = [
+  { label: '総投稿数', value: `${DATA.total_posts}件`, sub: '2026年1月〜11月' },
+  { label: '関わった人数', value: `${DATA.total_people}人`, sub: '投稿者+参加者（延べではなく実人数）' },
+  { label: '合計活動時間', value: `約${totalHours}時間`, sub: `${DATA.total_minutes}分（人ごとCSVの合計）` },
+  { label: '完了率', value: `${completionRate}%`, sub: `終了 ${DATA.num_done}件 / 全${DATA.total_posts}件` },
+  { label: '取り下げ率', value: `${cancelRate}%`, sub: `${DATA.num_cancelled}件が途中で取り下げ` },
+];
+document.getElementById('statGrid').innerHTML = stats.map(s => `
+  <div class="stat-tile">
+    <div class="label">${s.label}</div>
+    <div class="value">${s.value}</div>
+    <div class="sub">${s.sub}</div>
+  </div>`).join('');
+
+// ---- Chart 1: monthly status stacked bar ----
+const statusKeys = ['終了', '取り下げ', '活動中', '募集中'];
+const statusColors = { '終了': COLORS.s1, '取り下げ': COLORS.s8, '活動中': COLORS.s4, '募集中': COLORS.s3 };
+new Chart(document.getElementById('chartStatus'), {
+  type: 'bar',
+  data: {
+    labels: monthLabels,
+    datasets: statusKeys.map(k => ({
+      label: k,
+      data: DATA.months.map(m => (DATA.monthly_status[m] && DATA.monthly_status[m][k]) || 0),
+      backgroundColor: statusColors[k],
+      borderRadius: 4,
+      borderSkipped: false,
+    }))
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      x: { stacked: true, grid: { display: false }, ticks: commonAxisTicks },
+      y: { stacked: true, beginAtZero: true, grid: commonScaleGrid, ticks: commonAxisTicks, title: { display: true, text: '件数', color: COLORS.textMuted } }
+    },
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, usePointStyle: true, pointStyle: 'rectRounded' } },
+      tooltip: { callbacks: { footer: (items) => {
+        const total = items.reduce((a,i)=>a+i.parsed.y,0);
+        return `合計: ${total}件`;
+      }}}
+    }
+  }
+});
+
+// ---- Chart 2: monthly minutes (hours) ----
+new Chart(document.getElementById('chartMinutes'), {
+  type: 'bar',
+  data: {
+    labels: monthLabels,
+    datasets: [{
+      label: '活動時間',
+      data: DATA.monthly_minutes_by_post.map(m => Math.round(m/60*10)/10),
+      backgroundColor: COLORS.seq400,
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { grid: { display: false }, ticks: commonAxisTicks },
+      y: { beginAtZero: true, grid: commonScaleGrid, ticks: commonAxisTicks, title: { display: true, text: '時間', color: COLORS.textMuted } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: (item) => `${item.parsed.y} 時間` } }
+    }
+  }
+});
+
+// ---- Chart 3: people reach (line) ----
+new Chart(document.getElementById('chartPeople'), {
+  type: 'line',
+  data: {
+    labels: monthLabels,
+    datasets: [
+      {
+        label: 'その月に関わった人数（延べ・重複除く）',
+        data: DATA.monthly_active_unique,
+        borderColor: COLORS.s1, backgroundColor: COLORS.s1,
+        tension: 0.25, borderWidth: 2, pointRadius: 3, pointBackgroundColor: COLORS.s1,
+      },
+      {
+        label: '新規に登場した人数',
+        data: DATA.monthly_new_people,
+        borderColor: COLORS.s2, backgroundColor: COLORS.s2,
+        tension: 0.25, borderWidth: 2, pointRadius: 3, pointBackgroundColor: COLORS.s2, borderDash: [4,3],
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    scales: {
+      x: { grid: { display: false }, ticks: commonAxisTicks },
+      y: { beginAtZero: true, grid: commonScaleGrid, ticks: commonAxisTicks, title: { display: true, text: '人数', color: COLORS.textMuted } }
+    },
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, usePointStyle: true } } }
+  }
+});
+
+// ---- Chart 4: category horizontal bar (sequential, magnitude ranking) ----
+const catSorted = DATA.cat_counts;
+new Chart(document.getElementById('chartCategory'), {
+  type: 'bar',
+  data: {
+    labels: catSorted.map(c => c[0]),
+    datasets: [{
+      label: '件数',
+      data: catSorted.map(c => c[1]),
+      backgroundColor: COLORS.seq400,
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      x: { beginAtZero: true, grid: commonScaleGrid, ticks: commonAxisTicks },
+      y: { grid: { display: false }, ticks: commonAxisTicks }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// ---- Chart 5a: area bar ----
+new Chart(document.getElementById('chartArea'), {
+  type: 'bar',
+  data: {
+    labels: DATA.area_counts.map(a => a[0]),
+    datasets: [{ data: DATA.area_counts.map(a => a[1]), backgroundColor: [COLORS.s1, COLORS.s2, COLORS.s3], borderRadius: 4 }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    scales: { x: { beginAtZero: true, grid: commonScaleGrid, ticks: commonAxisTicks }, y: { grid: { display: false }, ticks: commonAxisTicks } },
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (i) => `${i.parsed.x}件` } } }
+  }
+});
+
+// ---- Chart 5b: type bar ----
+new Chart(document.getElementById('chartType'), {
+  type: 'bar',
+  data: {
+    labels: DATA.type_counts.map(a => a[0]),
+    datasets: [{ data: DATA.type_counts.map(a => a[1]), backgroundColor: [COLORS.s1, COLORS.s7], borderRadius: 4 }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    scales: { x: { beginAtZero: true, grid: commonScaleGrid, ticks: commonAxisTicks }, y: { grid: { display: false }, ticks: commonAxisTicks } },
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (i) => `${i.parsed.x}件` } } }
+  }
+});
+
+// ---- Chart 6: top people by minutes ----
+const topPeople = DATA.top_people_minutes.slice().reverse();
+new Chart(document.getElementById('chartPeopleTop'), {
+  type: 'bar',
+  data: {
+    labels: topPeople.map(p => p[0]),
+    datasets: [{ label: '合計時間(分)', data: topPeople.map(p => p[1]), backgroundColor: COLORS.seq400, borderRadius: 4 }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    scales: { x: { beginAtZero: true, grid: commonScaleGrid, ticks: commonAxisTicks, title: { display: true, text: '分', color: COLORS.textMuted } }, y: { grid: { display: false }, ticks: commonAxisTicks } },
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (i) => `${i.parsed.x}分（約${Math.round(i.parsed.x/60*10)/10}時間）` } } }
+  }
+});
+
+// ---- Insights ----
+const insights = [
+  '<span class="tag">活動の波</span>5月(20件)・6月(17件)に投稿が集中し、6月は月間でのべ28人が関わる最も活発な月だった。一方で<b>5月は取り下げ率が50%（10/20件）</b>と他月（11〜20%台）から大きく外れており、何が原因で依頼が成立しなかったのかを振り返る価値がある。',
+  '<b>新規参加者は8月以降ほぼゼロ</b>（8月0人・10月0人・11月0人）。1月(10人)・6月(11人)にあった新規流入の勢いが夏以降止まっており、担い手の広がりが鈍化している可能性がある。',
+  '依頼（お願い）79件に対し、提供（お手伝い）はわずか20件。<b>約4:1の非対称</b>があり、「手伝いたい」側の投稿を増やす仕掛け（声かけ・募集企画など）が必要かもしれない。',
+  'カテゴリは「その他」が36件で全体の36%を占め最多。実態が分類からは見えにくいため、「その他」の内容を棚卸しして新しいカテゴリに分割すると、どんな支援が求められているかがより明確になる。',
+  'エリア別では「すべて」52件・麻績村44件に対し<b>筑北村はわずか3件</b>。筑北村での認知・利用がまだ広がっていない可能性がある。',
+  '活動時間（延べ分）の月間合計は9月が最大（約59時間）だが、投稿件数は8件と少ない。少数の長時間・多人数の活動が月の総量を押し上げており、件数だけでは活動の規模感を見誤る。',
+  '<b>データ品質の注意点</b>：「終了」71件のうち、実際に活動した日（実施日）が記録されているのは20件のみで、51件は未記入。本ダッシュボードの月次集計は便宜上すべて「投稿日」基準としているため、実際の活動タイミングとはズレがある可能性がある。今後は実施日の記入を徹底すると、より正確な時系列分析ができる。',
+  '和栗さん・わくわくの村・小林さんの上位3名/団体が活動時間・参加件数の両方で突出している。コアメンバーへの集中度が高く、特定の人に依存した運営になっていないか（持続可能性の観点）は注視したい。',
+];
+document.getElementById('insightsList').innerHTML = insights.map(i => `<li>${i}</li>`).join('');
+
+// ---- Summary table ----
+const rows = DATA.months.map((m, i) => {
+  const st = DATA.monthly_status[m] || {};
+  return `<tr>
+    <td>${monthLabel(m)}</td>
+    <td>${DATA.monthly_posted[i]}</td>
+    <td>${st['終了']||0}</td>
+    <td>${st['取り下げ']||0}</td>
+    <td>${DATA.monthly_cancel_rate[i]}%</td>
+    <td>${Math.round(DATA.monthly_minutes_by_post[i]/60*10)/10}</td>
+    <td>${DATA.monthly_active_unique[i]}</td>
+    <td>${DATA.monthly_new_people[i]}</td>
+  </tr>`;
+}).join('');
+document.getElementById('summaryTable').innerHTML = `
+  <thead><tr>
+    <th>月</th><th>投稿数</th><th>終了</th><th>取り下げ</th><th>取り下げ率</th><th>活動時間(h)</th><th>関わった人数</th><th>新規</th>
+  </tr></thead>
+  <tbody>${rows}</tbody>`;
+</script>
+</body>
+</html>

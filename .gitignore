@@ -2,6 +2,9 @@
 .DS_Store
 Thumbs.db
 
+# Activity data exports (contain participants' real names)
+/data/
+
 # Large media files
 *.mp4
 *.mov
