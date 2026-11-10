@@ -90,7 +90,8 @@ header .wrapper {
     z-index: 1001;
     border-radius: 15px;
     position: fixed;
-    width: 1200px;
+    width: 100%;
+    max-width: 1200px;
 }
 
 header p {
@@ -121,11 +122,15 @@ li {
     line-height: 0;
 }
 
-/* navigation */
+/* navigation（ヘッダーの右端に寄せる） */
+.nav {
+    margin-left: auto;
+    margin-right: 1.5rem;
+}
+
 .nav ul {
     display: flex;
     text-align: center;
-    margin-left: 500px;
 }
 
 .nav ul li a {
@@ -147,6 +152,17 @@ li {
 .item {
     display: block;
     padding: 1rem;
+}
+
+/* 幅の狭いPC・タブレットでメニューがはみ出さないよう少し小さくする */
+@media (max-width: 960px) {
+    .nav ul li a {
+        font-size: 1.4rem;
+    }
+
+    .item {
+        padding: 1rem 0.6rem;
+    }
 }
 
 /* nature */
@@ -964,10 +980,17 @@ td {
     padding-left: 10px;
 }
 
+/* 縦横の写真が混ざっても揃って見えるよう、1列に同じ幅で縦に並べる */
 .activity-photos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.activity-photos-grid .activity-photo-item {
+    width: 100%;
+    max-width: 720px;
 }
 
 .activity-photo-item {
@@ -1008,21 +1031,28 @@ td {
     }
 
     /* header */
+    /* scroll_right のアニメーション前の translateX(30px) で横スクロールが出て、
+       ヘッダー右端のメニューが画面外に押し出されるのを防ぐ */
+    html {
+        overflow-x: hidden;
+    }
+
     header .wrapper {
         height: 70px;
-        width: 700px;
+        /* 100% だとスマホのレイアウト幅の広がりに引きずられるため画面幅を直接指定 */
+        width: 100vw;
         border-radius: 0;
         margin-top: 0;
     }
 
     .title {
-        width: 190px;
+        width: 160px;
         margin-top: 20px;
         margin-left: 10px;
     }
 
     .logo {
-        font-size: 25px;
+        font-size: 22px;
         margin-left: 0px;
         padding-left: 0px;
         margin-top: 10px;
@@ -1030,18 +1060,25 @@ td {
         line-height: 20px;
     }
 
+    .nav {
+        margin-right: 6px;
+    }
+
     .nav ul {
-        margin-left: 18px;
         margin-top: 5px;
-        width: 300px;
+    }
+
+    /* スマホ幅では4項目が入りきらないため Home を隠す（ロゴからトップへ戻れる） */
+    .main-nav .item:first-child {
+        display: none;
     }
 
     .nav ul li a {
-        font-size: 17px;
+        font-size: 14px;
     }
 
     .item {
-        padding: 1rem 13px 1rem 0;
+        padding: 1rem 0 1rem 8px;
     }
 
     /* nature */
@@ -1172,7 +1209,6 @@ td {
     }
 
     .activity-photos-grid {
-        grid-template-columns: 1fr;
         gap: 1rem;
     }
 }
