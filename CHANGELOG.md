@@ -8,7 +8,7 @@
 
 ### 変更内容
 
-- **`index.html`** — 「活動実績」欄（`#activities`）を「じかんぎんこうとは」と「Member」の間へ移動。メニューに `Activities`（`#activities`）を追加。
+- **`index.html`** — 「活動実績」欄（`#activities`）を「じかんぎんこうとは」と「Member」の間へ移動。メニューに `Activities`（活動実績の一覧ページ `activities/index.html` へのリンク）を追加。
 - **`activities/index.html`、`activities/*/index.html`、テンプレート `activity-detail-template.html`** — メニューに `Activities`（活動実績の一覧ページへのリンク）を追加。
 - **`static/css/main.css`**
   - ヘッダーを固定幅 `1200px` から `width: 100%; max-width: 1200px` に変更。メニューは `margin-left: 500px` をやめて右寄せにした。
