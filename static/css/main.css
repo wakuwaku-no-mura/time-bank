@@ -879,6 +879,14 @@ td {
     display: block;
 }
 
+/* movie */
+.movie {
+    width: 100%;
+    max-width: 640px;
+    aspect-ratio: 16 / 9;
+    border: 0;
+}
+
 /* MOBILE SIZE */
 
 @media (max-width: 700px) {
