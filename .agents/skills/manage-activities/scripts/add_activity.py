@@ -40,7 +40,7 @@ def main():
             print(f"Warning: Image source file not found: {src}")
             continue
         ext = os.path.splitext(src)[1]
-        dest_filename = f"schongarten_{args.slug.replace('-', '_')}_{i+1}{ext}"
+        dest_filename = f"{args.slug.replace('-', '_')}_{i+1}{ext}"
         dest_path = os.path.join(images_dest_dir, dest_filename)
         
         print(f"Compressing {src} -> {dest_path}...")
