@@ -10,7 +10,8 @@ description: 時間銀行（じかんぎんこう）の活動実績を追加・�
 ## 主な機能
 
 - `/activities/<slug>/index.html` の個別記事ページの自動生成。
-- `/activities/index.html`（一覧ページ）への活動カードの自動挿入。
+- `/activities/index.html`（一覧ページ）への活動カードの自動挿入と、日付の新しい順への並べ替え（過去の日付の活動を後から追加しても正しい位置に入る）。
+- トップページ `index.html` の「活動実績」欄（`#activities`）を、一覧ページの最新3件で自動的に作り直す。古い記事へは「活動実績をすべて見る」ボタンから一覧ページで辿れる。
 - 追加される画像の自動リサイズ・圧縮（macOS `sips` コマンド使用）。
 - `CHANGELOG.md` への変更履歴の自動追記。
 
@@ -39,7 +40,8 @@ python3 .agents/skills/manage-activities/scripts/add_activity.py \
 ### 2. 手動での確認・テスト
 
 スクリプト実行完了後、以下のファイルが正しく更新されていることを確認します：
-- [activities/index.html](file:///Users/kat/src/github.com/wakuwaku-no-mura/time-bank/activities/index.html) (カードの追加)
+- [activities/index.html](file:///Users/kat/src/github.com/wakuwaku-no-mura/time-bank/activities/index.html) (カードの追加・日付順)
+- [index.html](file:///Users/kat/src/github.com/wakuwaku-no-mura/time-bank/index.html) の「活動実績」欄 (最新3件)
 - `/activities/<slug>/index.html` (個別記事ページの生成)
 - `static/images/activities/<slug>/` (圧縮画像の保存)
 - [CHANGELOG.md](file:///Users/kat/src/github.com/wakuwaku-no-mura/time-bank/CHANGELOG.md) (ログの追記)

@@ -705,6 +705,27 @@ td {
     border-top: 1px dashed #add1ef;
 }
 
+/* home: activities (latest 3) */
+.activity-links-grid .partner-link-item {
+    width: 300px;
+    background-color: #fff;
+}
+
+.activity-links-grid .partner-link-item img {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.activity-link-date {
+    display: block;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.activity-links-more {
+    margin: 1.8rem 0 0;
+}
+
 /* news section */
 .news-item {
     max-width: 720px;

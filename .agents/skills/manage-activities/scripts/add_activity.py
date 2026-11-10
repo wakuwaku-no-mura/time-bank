@@ -3,7 +3,61 @@ import argparse
 import os
 import subprocess
 from datetime import datetime
+import re
 import shutil
+
+HOME_LATEST_COUNT = 3
+CARD_RE = re.compile(r'                <a class="activity-card".*?</a>\n', re.S)
+
+
+def _list_grid_bounds(list_html):
+    start = list_html.index('<div class="activity-grid">') + len('<div class="activity-grid">')
+    end = list_html.index('            </div>\n        </section>', start)
+    return start, end
+
+
+def _card_date(card):
+    m = re.search(r'activity-date">([\d.]+)<', card)
+    return m.group(1) if m else ""
+
+
+def sort_list_cards(list_html):
+    """一覧ページのカードを日付の新しい順に並べ替える。"""
+    start, end = _list_grid_bounds(list_html)
+    cards = CARD_RE.findall(list_html[start:end])
+    cards.sort(key=_card_date, reverse=True)
+    return list_html[:start] + "\n" + "\n".join(cards) + list_html[end:]
+
+
+def update_home_latest(project_root, list_html):
+    """トップページの活動実績欄を、一覧ページの先頭 HOME_LATEST_COUNT 件で作り直す。"""
+    home_path = os.path.join(project_root, "index.html")
+    with open(home_path, "r", encoding="utf-8") as f:
+        home_html = f.read()
+    marker = '<div class="partner-links-grid activity-links-grid">'
+    if marker not in home_html:
+        print(f"Warning: could not find '{marker}' in index.html. Home page was not updated.")
+        return
+    start, end = _list_grid_bounds(list_html)
+    items = []
+    for card in CARD_RE.findall(list_html[start:end])[:HOME_LATEST_COUNT]:
+        href = re.search(r'href="([^"]+)"', card).group(1)
+        img = re.search(r'<img src="\.\./([^"]+)"', card).group(1)
+        title = re.search(r'activity-title">(.*?)</h3>', card, re.S).group(1).strip()
+        date = _card_date(card)
+        items.append(
+            f'                <a class="partner-link-item" href="activities/{href}">\n'
+            f'                    <img src="{img}" alt="{title}">\n'
+            f'                    <span class="partner-link-text"><span class="activity-link-date">{date}</span>{title}</span>\n'
+            f'                </a>\n'
+        )
+    g_start = home_html.index(marker) + len(marker)
+    g_end = home_html.index('            </div>', g_start)
+    home_html = home_html[:g_start] + "\n" + "".join(items) + home_html[g_end:]
+    with open(home_path, "w", encoding="utf-8") as f:
+        f.write(home_html)
+    print(f"Updated latest {len(items)} activities on: {home_path}")
+
 
 def main():
     parser = argparse.ArgumentParser(description="Add a new activity to time-bank.")
@@ -108,9 +162,12 @@ def main():
     if target_str in list_html:
         parts = list_html.split(target_str, 1)
         new_list_html = parts[0] + target_str + "\n" + card_html + parts[1]
+        new_list_html = sort_list_cards(new_list_html)
         with open(list_html_path, "w", encoding="utf-8") as f:
             f.write(new_list_html)
-        print(f"Inserted activity card into: {list_html_path}")
+        print(f"Inserted activity card into: {list_html_path} (sorted by date)")
+        # 4b. トップページ (index.html) の「活動実績」欄を最新3件で作り直す
+        update_home_latest(project_root, new_list_html)
     else:
         print(f"Warning: could not find '{target_str}' in {list_html_path}. Card was not inserted automatically.")
 
